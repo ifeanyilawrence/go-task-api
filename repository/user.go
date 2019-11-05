@@ -37,3 +37,42 @@ func AllUsers() ([]models.User, error) {
 	}
 	return users, nil
 }
+
+//GetSingleUser : returns one users
+func GetSingleUser(userID bson.ObjectId) (models.User, error) {
+	if !userID.Valid() {
+		return models.User{}, errors.New("400. Bad Request")
+	}
+	user := models.User{}
+	err := config.Users.Find(bson.M{"_id": userID}).One(&user)
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
+
+//UpdateUser : updates user details
+func UpdateUser(user models.User) (models.User, error) {
+	if (models.User{}) == user || !user.ID.Valid() {
+		return models.User{}, errors.New("400. Bad Request")
+	}
+
+	err := config.Users.Update(bson.M{"_id": user.ID}, &user)
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
+
+//DeleteUser : removes a user from the DB
+func DeleteUser(userID bson.ObjectId) (bool, error) {
+	if !userID.Valid() {
+		return false, errors.New("400. Bad Request")
+	}
+
+	err := config.Users.Remove(bson.M{"_id": userID})
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
