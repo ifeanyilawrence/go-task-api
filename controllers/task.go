@@ -10,17 +10,17 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-//CreateUser : creats a New User
-func CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user models.User
-	err := json.NewDecoder(r.Body).Decode(&user)
+//CreateTask : creats a New Task
+func CreateTask(w http.ResponseWriter, r *http.Request) {
+	var task models.Task
+	err := json.NewDecoder(r.Body).Decode(&task)
 
 	if err != nil {
 		http.Error(w, http.StatusText(400), http.StatusBadRequest)
 		return
 	}
 
-	newUser, err := repository.CreateUser(user)
+	newTask, err := repository.Create(task)
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
@@ -30,12 +30,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	json.NewEncoder(w).Encode(newUser)
+	json.NewEncoder(w).Encode(newTask)
 }
 
-//GetUsers : returns all the users
-func GetUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := repository.AllUsers()
+//GetTasks : returns all the tasks
+func GetTasks(w http.ResponseWriter, r *http.Request) {
+	tasks, err := repository.AllTasks()
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
@@ -45,11 +45,11 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(users)
+	json.NewEncoder(w).Encode(tasks)
 }
 
-//GetSingleUser : returns one user
-func GetSingleUser(w http.ResponseWriter, r *http.Request) {
+//GetSingleTask : returns one task
+func GetSingleTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	if params["id"] == "" {
@@ -57,9 +57,9 @@ func GetSingleUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := bson.ObjectIdHex(params["id"])
+	taskID := bson.ObjectIdHex(params["id"])
 
-	user, err := repository.GetSingleUser(userID)
+	task, err := repository.GetSingleTask(taskID)
 
 	if err != nil {
 		http.Error(w, http.StatusText(404), http.StatusNotFound)
@@ -69,11 +69,11 @@ func GetSingleUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(task)
 }
 
-//UpdateUser : modify user details
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
+//UpdateTask : modify task details
+func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	if params["id"] == "" {
@@ -81,17 +81,17 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user models.User
-	err := json.NewDecoder(r.Body).Decode(&user)
+	var task models.Task
+	err := json.NewDecoder(r.Body).Decode(&task)
 
 	if err != nil {
 		http.Error(w, http.StatusText(400), http.StatusBadRequest)
 		return
 	}
 
-	user.ID = bson.ObjectIdHex(params["id"])
+	task.ID = bson.ObjectIdHex(params["id"])
 
-	updatedUser, err := repository.UpdateUser(user)
+	updatedTask, err := repository.Updatetask(task)
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
@@ -101,11 +101,11 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(updatedUser)
+	json.NewEncoder(w).Encode(updatedTask)
 }
 
-//DeleteUser : removes a user from DB
-func DeleteUser(w http.ResponseWriter, r *http.Request) {
+//DeleteTask : removes a task from DB
+func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	if params["id"] == "" {
@@ -113,9 +113,9 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := bson.ObjectIdHex(params["id"])
+	taskID := bson.ObjectIdHex(params["id"])
 
-	deleted, err := repository.DeleteUser(userID)
+	deleted, err := repository.Deletetask(taskID)
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)

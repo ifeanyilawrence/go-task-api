@@ -8,8 +8,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-//Create : create a new user
-func Create(user models.User) (models.User, error) {
+//CreateUser : create a new user
+func CreateUser(user models.User) (models.User, error) {
 	if (models.User{}) == user {
 		return models.User{}, errors.New("400. Bad Request")
 	}
