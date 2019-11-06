@@ -20,7 +20,7 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newTask, err := repository.Create(task)
+	newTask, err := repository.CreateTask(task)
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
@@ -91,7 +91,7 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 
 	task.ID = bson.ObjectIdHex(params["id"])
 
-	updatedTask, err := repository.Updatetask(task)
+	updatedTask, err := repository.UpdateTask(task)
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
@@ -115,7 +115,7 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 	taskID := bson.ObjectIdHex(params["id"])
 
-	deleted, err := repository.Deletetask(taskID)
+	deleted, err := repository.DeleteTask(taskID)
 
 	if err != nil {
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)

@@ -5,6 +5,7 @@ import (
 
 	"github.com/ifeanyilawrence/go-task-api/config"
 	"github.com/ifeanyilawrence/go-task-api/models"
+	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -18,8 +19,16 @@ func CreateUser(user models.User) (models.User, error) {
 	_ = config.Users.Find(bson.M{"email": user.Email}).One(&usr)
 
 	if usr.Email != "" {
-		return models.User{}, errors.New("400. User with this email already exist")
+		return models.User{}, errors.New("User with this email already exist")
 	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 5)
+
+	if err != nil {
+		return models.User{}, errors.New("Error While Hashing Password, Try Again")
+	}
+
+	user.Password = string(hash)
 
 	user.ID = bson.NewObjectId()
 

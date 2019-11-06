@@ -8,8 +8,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-//Create : create a new task
-func Create(task models.Task) (models.Task, error) {
+//CreateTask : create a new task
+func CreateTask(task models.Task) (models.Task, error) {
 	if (models.Task{}) == task {
 		return models.Task{}, errors.New("400. Bad Request")
 	}
@@ -51,8 +51,8 @@ func GetSingleTask(taskID bson.ObjectId) (models.Task, error) {
 	return task, nil
 }
 
-//Updatetask : updates task details
-func Updatetask(task models.Task) (models.Task, error) {
+//UpdateTask : updates task details
+func UpdateTask(task models.Task) (models.Task, error) {
 	if (models.Task{}) == task || !task.ID.Valid() {
 		return models.Task{}, errors.New("400. Bad Request")
 	}
@@ -64,8 +64,8 @@ func Updatetask(task models.Task) (models.Task, error) {
 	return task, nil
 }
 
-//Deletetask : removes a task from the DB
-func Deletetask(taskID bson.ObjectId) (bool, error) {
+//DeleteTask : removes a task from the DB
+func DeleteTask(taskID bson.ObjectId) (bool, error) {
 	if !taskID.Valid() {
 		return false, errors.New("400. Bad Request")
 	}

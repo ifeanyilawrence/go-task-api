@@ -123,7 +123,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !deleted {
-		http.Error(w, http.StatusText(500), http.StatusBadRequest)
+		http.Error(w, http.StatusText(400), http.StatusBadRequest)
 		return
 	}
 
