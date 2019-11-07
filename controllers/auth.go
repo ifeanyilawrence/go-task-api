@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
-	"strings"
 	"net/http"
+	"strings"
+	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ifeanyilawrence/go-task-api/config"
@@ -72,28 +72,51 @@ func GetToken(w http.ResponseWriter, r *http.Request) {
 //Profile : returns user profile
 func Profile(w http.ResponseWriter, r *http.Request) {
 
-	tokenString := r.Header.Get("Authorization")
-	tokenSplit := strings.Split(tokenString, " ")[1]
-	
-	token, _ := jwt.Parse(tokenSplit, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method")
-		}
-		return []byte("secret"), nil
-	})
+	status, token := Authenticate(r)
+
+	if !status {
+		http.Error(w, "Invalid Token", http.StatusBadRequest)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
-	
+
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		result := struct{ Email, Name string }{
 			Email: claims["email"].(string),
 			Name:  claims["name"].(string),
 		}
-		
+
 		json.NewEncoder(w).Encode(result)
 		return
 	}
 
 	http.Error(w, "Invalid Token", http.StatusBadRequest)
 	return
+}
+
+//Authenticate : authenticates a user
+func Authenticate(r *http.Request) (bool, *jwt.Token) {
+
+	fmt.Println("Am here")
+	tokenString := r.Header.Get("Authorization")
+	if tokenString == "" {
+		return false, nil
+	}
+
+	tokenSplit := strings.Split(tokenString, " ")[1]
+
+	token, _ := jwt.Parse(tokenSplit, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return false, nil
+		}
+		return []byte("secret"), nil
+	})
+
+	fmt.Println("Am here too", token)
+	if token.Valid {
+		return true, token
+	}
+
+	return false, nil
 }
