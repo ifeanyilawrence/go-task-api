@@ -15,4 +15,4 @@ Check this course out for an in-depth knowledge of golang: https://www.udemy.com
 
 Contact: 
 -    ![](https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-twitter-m.png)[Twitter](https://twitter.com/ifeanyilawrence) 
--    ![](https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-linkedin-m.png)[LinkedIn](https://www.linkedin.com/in/lawrence-ifeanyi-eze-2405149a/)
+-    ![](https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-linkedin-m.png)[LinkedIn](https://www.linkedin.com/in/lawrence-eze/)
